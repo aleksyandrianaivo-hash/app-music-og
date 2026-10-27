@@ -12,7 +12,7 @@ jobs:
         run: |
           SDK=$(xcrun --sdk iphoneos --show-sdk-path)
           clang -dynamiclib -arch arm64 -isysroot "$SDK" -miphoneos-version-min=16.0 \
-            -fobjc-arc -DDUMP=1 -framework UIKit -framework Foundation \
+            -fobjc-arc -DDUMP=1 -framework UIKit -framework Foundation -framework CoreGraphics -framework QuartzCore \
             -install_name @rpath/LiquidGlass.dylib \
             LiquidGlass.m -o LiquidGlass.dylib
           file LiquidGlass.dylib
