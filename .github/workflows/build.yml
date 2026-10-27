@@ -1,0 +1,22 @@
+name: Build LiquidGlass.dylib
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile
+        run: |
+          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+          clang -dynamiclib -arch arm64 -isysroot "$SDK" -miphoneos-version-min=16.0 \
+            -fobjc-arc -DDUMP=1 -framework UIKit -framework Foundation \
+            -install_name @rpath/LiquidGlass.dylib \
+            LiquidGlass.m -o LiquidGlass.dylib
+          file LiquidGlass.dylib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LiquidGlass-dylib
+          path: LiquidGlass.dylib
